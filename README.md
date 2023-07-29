@@ -56,6 +56,7 @@ ENVIRONMENT VARIABLES
 
 When creating a new GitHub repository, there are several common needs that may go overlooked:
 
+1. Adding a [code owners](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners) file
 1. Adding a [code of conduct](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project) such as [Contributor Covenant](https://www.contributor-covenant.org/)
 1. Adding a [license](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) from [choosealicense.com](https://choosealicense.com/)
 1. Adding a [`.gitignore`](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files) based upon [gitignore.io](https://gitignore.io)
@@ -67,6 +68,7 @@ One option would be using a [template repository](https://docs.github.com/en/rep
   ```shell
   .
   ├── .gitignore
+  ├── CODEOWNERS
   ├── CODE_OF_CONDUCT.md
   ├── LICENSE.txt
   └── README.md
@@ -82,6 +84,7 @@ One option would be using a [template repository](https://docs.github.com/en/rep
   
   # Ensure base files every repository needs are there if missing; do not override
   copyMissingFile $PUBLICIZE_SOURCE_DIR ".gitignore"
+  copyMissingFile $PUBLICIZE_SOURCE_DIR "CODEOWNERS"
   copyMissingFile $PUBLICIZE_SOURCE_DIR "CODE_OF_CONDUCT.md"
   copyMissingFile $PUBLICIZE_SOURCE_DIR "LICENSE.txt"
   
@@ -97,7 +100,10 @@ In the example above, the source repository contains the base files and it may b
 Running the shell script in dryrun mode:
 
 ```shell
-$ gh publicize --source-repo=andyfeller/template --repo=tinyfists/test-1 --repo=tinyfists/test-2 /Users/andyfeller/Documents/workspace/andyfeller/template/bin/00-base.sh 
+$ gh publicize --source-repo=andyfeller/template \
+               --repo=tinyfists/test-1 \
+               --repo=tinyfists/test-2 \
+               /Users/andyfeller/Documents/workspace/andyfeller/template/bin/00-base.sh 
 ```
 
 resulting in:
@@ -181,7 +187,11 @@ Repos whose specified branches did not exist on the remote, and so were first cr
 Running the shell script in run mode:
 
 ```shell
-$ ./gh-publicize --run --source-repo=andyfeller/template --repo=tinyfists/test-1 --repo=tinyfists/test-2 /Users/andyfeller/Documents/workspace/andyfeller/template/bin/00-base.sh
+$ ./gh publicize --run \
+                 --source-repo=andyfeller/template \
+                 --repo=tinyfists/test-1 \
+                 --repo=tinyfists/test-2 \
+                 /Users/andyfeller/Documents/workspace/andyfeller/template/bin/00-base.sh
 ```
 
 resulting in:
