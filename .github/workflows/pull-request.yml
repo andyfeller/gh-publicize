@@ -22,5 +22,7 @@ jobs:
       - name: Lint markdown
         if: ${{ always() }}
         uses: articulate/actions-markdownlint@v1
+        with:
+          config: .github/markdownlint.yml
 
 # vim: set expandtab ts=2 sw=2:

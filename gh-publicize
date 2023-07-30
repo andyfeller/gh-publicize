@@ -56,10 +56,10 @@ if ! type -p git-xargs > /dev/null; then
 fi
 
 while getopts "c:dhm:n:o:pR:rs:t:-:" OPT; do
-	if [ "$OPT" = "-" ]; then    # long option: reformulate OPT and OPTARG
-		OPT="${OPTARG%%=*}"      # extract long option name
-		OPTARG="${OPTARG#$OPT}"	 # extract long option argument (may be empty)
-		OPTARG="${OPTARG#=}"     # if long option argument, remove assigning `=`
+	if [ "$OPT" = "-" ]; then     # long option: reformulate OPT and OPTARG
+		OPT="${OPTARG%%=*}"       # extract long option name
+		OPTARG="${OPTARG#"$OPT"}" # extract long option argument (may be empty)
+		OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
 	fi
 
 	case "$OPT" in
