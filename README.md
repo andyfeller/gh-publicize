@@ -5,8 +5,7 @@ A `gh` extension to publish content from source repository into multiple target 
 Built on top of [`gruntwork-io/git-xargs`](https://github.com/gruntwork-io/git-xargs/), `gh-publicize` is more
 opinionated on how to publish content from a centralized location with specific default behaviors:
 
-1. Use of a centralized source repository to publish content from, whether used
-   as a template repository or not
+1. Use of a centralized source repository to publish content from, whether used as a template repository or not
 1. Provide helper library for shell scripts to simplify managing content
 1. Avoid making changes unless explicitly indicated _(`-r,--run` flag)_
 1. Avoid archived repositories unless explicitly indicated _(`-a,--include-archived-repos` flag)_
@@ -97,9 +96,8 @@ and a simple shell script.
   updateLabels
   ```
 
-In the example above, the source repository contains the base files and it may
-be a template repository in fact while the shell script leverages 
-[helper functions](lib/helpers.sh) to copy missing files only and update labels.
+In the example above, the source repository contains the base files and it may be a template repository in fact while
+the shell script leverages [helper functions](lib/helpers.sh) to copy missing files only and update labels.
 
 <details>
   <summary>
@@ -305,3 +303,4 @@ Like any other `gh` CLI extension, `gh-publicize` is trivial to install or upgra
 [github-template repository]: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository
 [contributor covenant]: https://www.contributor-covenant.org/
 [choosealicense]: https://choosealicense.com/
+

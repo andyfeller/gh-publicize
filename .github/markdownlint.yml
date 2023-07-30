@@ -6,4 +6,8 @@ MD013:
 
 MD033:
   allowed_elements:
+    - details
     - summary
+    - p
+    - b
+    - code
