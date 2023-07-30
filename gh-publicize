@@ -188,4 +188,4 @@ echo "Executing git-xargs command"
 GITHUB_OAUTH_TOKEN=$(gh auth token) git-xargs $GIT_XARGS_ARGS \
 	--branch-name "publish-$SOURCE_REPO-$SOURCE_REPO_SHA" \
 	--commit-message "Publishing changes based on ${SOURCE_REPO}@${SOURCE_REPO_SHA}" \
-	$@
+	"$@"
