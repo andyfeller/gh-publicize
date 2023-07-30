@@ -159,7 +159,9 @@ git -C $PUBLICIZE_SOURCE_DIR checkout $SOURCE_REPO_REV
 SOURCE_REPO_SHA=$(git -C $PUBLICIZE_SOURCE_DIR rev-parse HEAD)
 
 # Resolve location of home, containing binaries and libraries
-export PUBLICIZE_HOME="$(dirname $(realpath ${BASH_SOURCE:-$0}))"
+PUBLICIZE_SCRIPT="$(realpath ${BASH_SOURCE:-$0})"
+
+export PUBLICIZE_HOME="$(dirname $PUBLICIZE_SCRIPT)"
 export PUBLICIZE_LIB="$PUBLICIZE_HOME/lib"
 
 # Showtime

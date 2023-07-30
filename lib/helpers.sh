@@ -6,7 +6,7 @@ function copyFile {
 
 	if test -f "$SOURCE_FILE"; then
 		echo "Creating directory and copying for target file '$TARGET_FILE'"
-		mkdir -p $(dirname $TARGET_FILE)
+		mkdir -p $(dirname "$TARGET_FILE")
 		cp $SOURCE_FILE $TARGET_FILE
 	else
 		echo "Skip copying file; source file '$SOURCE_FILE' does not exist"
