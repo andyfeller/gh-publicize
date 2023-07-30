@@ -11,6 +11,7 @@ REVIEWERS=
 RUN=false
 SELECTOR=false
 SOURCE_REPO=
+SOURCE_REPO_PATH="bin"
 SOURCE_REPO_REV="main"
 
 __USAGE="
@@ -29,6 +30,7 @@ FLAGS
   -m, --repo=<owner>/<repo>            Target a specific repo, can be passed multiple times to target several repos
   -n, --repos=<file>                   Target multiple repos, file contains <owner>/<repo> entry per line
   -o, --org=<org>                      Target all repos in GitHub organization
+  -P, --source-repo-path=<dir>         Directory within source repository to add to path; default '$SOURCE_REPO_PATH'
   -p, --preserve                       Preserve temporary directory containing data
   -R, --reviewers=<csv-usernames>      Comma-separated list of usernames to review pull request
   -r, --run                            Apply changes; defaults to dryrun
@@ -55,7 +57,7 @@ if ! type -p git-xargs > /dev/null; then
 	die "'git-xargs' could not be found"
 fi
 
-while getopts "c:dhm:n:o:pR:rs:t:-:" OPT; do
+while getopts "ac:dhm:n:o:P:pR:rs:t:-:" OPT; do
 	if [ "$OPT" = "-" ]; then     # long option: reformulate OPT and OPTARG
 		OPT="${OPTARG%%=*}"       # extract long option name
 		OPTARG="${OPTARG#"$OPT"}" # extract long option argument (may be empty)
@@ -113,6 +115,10 @@ while getopts "c:dhm:n:o:pR:rs:t:-:" OPT; do
 			SOURCE_REPO="${OPTARG}"
 			;;
 
+		source-repo-path | P)
+			SOURCE_REPO_PATH="${OPTARG}"
+			;;
+
 		source-repo-revision | t)
 			SOURCE_REPO_REV="${OPTARG}"
 			;;
@@ -166,6 +172,14 @@ echo "Cloning $SOURCE_REPO, checking out $SOURCE_REPO_REV"
 gh repo clone "$SOURCE_REPO" "$PUBLICIZE_SOURCE_DIR"
 git -C "$PUBLICIZE_SOURCE_DIR" checkout "$SOURCE_REPO_REV"
 SOURCE_REPO_SHA=$(git -C "$PUBLICIZE_SOURCE_DIR" rev-parse HEAD)
+
+# Update PATH to include source repository binary directory if exists
+PUBLICIZE_SOURCE_PATH="$PUBLICIZE_SOURCE_DIR/$SOURCE_REPO_PATH"
+
+if test -d "$PUBLICIZE_SOURCE_PATH"; then
+	echo "Prepending '$PUBLICIZE_SOURCE_PATH' to PATH"
+	export PATH="$PUBLICIZE_SOURCE_PATH:$PATH"
+fi
 
 # Resolve location of home, containing binaries and libraries
 PUBLICIZE_SCRIPT="$(realpath "${BASH_SOURCE:-$0}")"
