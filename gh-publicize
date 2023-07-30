@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2213,SC2214
 set -e
 
 CACHE_DIR=
 DEBUG=false
+GIT_XARGS_ARGS=()
 INCLUDE_ARCHIVED_REPOS=false
 PRESERVE=false
 REVIEWERS=
 RUN=false
-SELECTOR=
+SELECTOR=false
 SOURCE_REPO=
 SOURCE_REPO_REV="main"
 
@@ -54,10 +56,10 @@ if ! type -p git-xargs > /dev/null; then
 fi
 
 while getopts "c:dhm:n:o:pR:rs:t:-:" OPT; do
-	if [ "$OPT" = "-" ]; then    # long option: reformulate OPT and OPTARG
-		OPT="${OPTARG%%=*}"      # extract long option name
-		OPTARG="${OPTARG#$OPT}"	 # extract long option argument (may be empty)
-		OPTARG="${OPTARG#=}"     # if long option argument, remove assigning `=`
+	if [ "$OPT" = "-" ]; then     # long option: reformulate OPT and OPTARG
+		OPT="${OPTARG%%=*}"       # extract long option name
+		OPTARG="${OPTARG#"$OPT"}" # extract long option argument (may be empty)
+		OPTARG="${OPTARG#=}"      # if long option argument, remove assigning `=`
 	fi
 
 	case "$OPT" in
@@ -81,15 +83,18 @@ while getopts "c:dhm:n:o:pR:rs:t:-:" OPT; do
 			;;
 
 		repo | m)
-			SELECTOR="$SELECTOR --repo ${OPTARG}"
+			SELECTOR=true
+			GIT_XARGS_ARGS+=(--repo "${OPTARG}")
 			;;
 
 		repos | n)
-			SELECTOR="--repos ${OPTARG}"
+			SELECTOR=true
+			GIT_XARGS_ARGS+=(--repos "${OPTARG}")
 			;;
 
 		org | o)
-			SELECTOR="--github-org ${OPTARG}"
+			SELECTOR=true
+			GIT_XARGS_ARGS+=(--github-org "${OPTARG}")
 			;;
 
 		preserve | p)
@@ -111,6 +116,10 @@ while getopts "c:dhm:n:o:pR:rs:t:-:" OPT; do
 		source-repo-revision | t)
 			SOURCE_REPO_REV="${OPTARG}"
 			;;
+
+		*)
+			die "Unknown flag '$OPT'"
+			;;
 	esac
 done
 
@@ -121,7 +130,7 @@ if [ -z "$SOURCE_REPO" ]; then
 	die "Must provide source repository (-s,--source-repo)"
 fi
 
-if [ -z "$SELECTOR" ]; then
+if ! $SELECTOR; then
 	die "Must provide selector (-m,--repo | -n,--repos | -o,--org)"
 fi
 
@@ -140,7 +149,7 @@ elif [ -z "$CACHE_DIR" ]; then
 		trap 'rm -rf -- "$CACHE_DIR"' EXIT
 	fi
 else
-	mkdir -p $CACHE_DIR
+	mkdir -p "$CACHE_DIR"
 	echo "Created directory for caching data:  $CACHE_DIR"
 fi
 
@@ -154,36 +163,37 @@ if test -d "$PUBLICIZE_SOURCE_DIR"; then
 fi
 
 echo "Cloning $SOURCE_REPO, checking out $SOURCE_REPO_REV"
-gh repo clone $SOURCE_REPO $PUBLICIZE_SOURCE_DIR
-git -C $PUBLICIZE_SOURCE_DIR checkout $SOURCE_REPO_REV
-SOURCE_REPO_SHA=$(git -C $PUBLICIZE_SOURCE_DIR rev-parse HEAD)
+gh repo clone "$SOURCE_REPO" "$PUBLICIZE_SOURCE_DIR"
+git -C "$PUBLICIZE_SOURCE_DIR" checkout "$SOURCE_REPO_REV"
+SOURCE_REPO_SHA=$(git -C "$PUBLICIZE_SOURCE_DIR" rev-parse HEAD)
 
 # Resolve location of home, containing binaries and libraries
-export PUBLICIZE_HOME="$(dirname $(realpath ${BASH_SOURCE:-$0}))"
+PUBLICIZE_SCRIPT="$(realpath "${BASH_SOURCE:-$0}")"
+
+# shellcheck disable=SC2155
+export PUBLICIZE_HOME="$(dirname "$PUBLICIZE_SCRIPT")"  
 export PUBLICIZE_LIB="$PUBLICIZE_HOME/lib"
 
-# Showtime
-GIT_XARGS_ARGS="$SELECTOR"
-
+# Wrap up final argumnets for git-xargs, then showtime
 if ! $INCLUDE_ARCHIVED_REPOS; then
-	GIT_XARGS_ARGS="$GIT_XARGS_ARGS --skip-archived-repos"
+	GIT_XARGS_ARGS+=(--skip-archived-repos)
 fi
 
 if ! $RUN; then
-	GIT_XARGS_ARGS="$GIT_XARGS_ARGS --dry-run"
+	GIT_XARGS_ARGS+=(--dry-run)
 fi
 
 if $DEBUG; then
-	GIT_XARGS_ARGS="$GIT_XARGS_ARGS --loglevel DEBUG"
+	GIT_XARGS_ARGS+=(--loglevel DEBUG)
 fi
 
-if [ ! -z "$REVIEWERS" ]; then
-	GIT_XARGS_ARGS="$GIT_XARGS_ARGS --reviewers \"$REVIEWERS\""
+if [ -n "$REVIEWERS" ]; then
+	GIT_XARGS_ARGS+=(--reviewers "$REVIEWERS")
 fi
+
+GIT_XARGS_ARGS+=(--branch-name "publish-$SOURCE_REPO-$SOURCE_REPO_SHA")
+GIT_XARGS_ARGS+=(--commit-message "Publishing changes based on ${SOURCE_REPO}@${SOURCE_REPO_SHA}")
+GIT_XARGS_ARGS+=("$@")
 
 echo "Executing git-xargs command"
-
-GITHUB_OAUTH_TOKEN=$(gh auth token) git-xargs $GIT_XARGS_ARGS \
-	--branch-name "publish-$SOURCE_REPO-$SOURCE_REPO_SHA" \
-	--commit-message "Publishing changes based on ${SOURCE_REPO}@${SOURCE_REPO_SHA}" \
-	$@
+GITHUB_OAUTH_TOKEN=$(gh auth token) git-xargs "${GIT_XARGS_ARGS[@]}"
