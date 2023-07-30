@@ -2,9 +2,11 @@
 
 A `gh` extension to publish content from source repository into multiple target repositories.
 
-Built on top of [`gruntwork-io/git-xargs`](https://github.com/gruntwork-io/git-xargs/), `gh-publicize` is more opinionated on how to publish content from a centralized location with specific default behaviors:
+Built on top of [`gruntwork-io/git-xargs`](https://github.com/gruntwork-io/git-xargs/), `gh-publicize` is more
+opinionated on how to publish content from a centralized location with specific default behaviors:
 
-1. Use of a centralized source repository to publish content from, whether used as a template repository or not
+1. Use of a centralized source repository to publish content from, whether used
+   as a template repository or not
 1. Provide helper library for shell scripts to simplify managing content
 1. Avoid making changes unless explicitly indicated _(`-r,--run` flag)_
 1. Avoid archived repositories unless explicitly indicated _(`-a,--include-archived-repos` flag)_
@@ -56,12 +58,15 @@ ENVIRONMENT VARIABLES
 
 When creating a new GitHub repository, there are several common needs that may go overlooked:
 
-1. Adding a [code owners](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners) file
-1. Adding a [code of conduct](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project) such as [Contributor Covenant](https://www.contributor-covenant.org/)
-1. Adding a [license](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository) from [choosealicense.com](https://choosealicense.com/)
-1. Adding a [`.gitignore`](https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files) based upon [gitignore.io](https://gitignore.io)
+1. Adding a [code owners][github-codeowners] file
+1. Adding a [code of conduct][github-code of conduct] such as [Contributor Covenant][contributor covenant]
+1. Adding a [license][github-license] from [choosealicense.com][choosealicense]
+1. Adding a [`.gitignore`][github-gitignore] based upon [gitignore.io][gitignore.io]
 
-One option would be using a [template repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository), except it relies upon people to use it and only supports static content.  This is where `gh-publicize` can offer a reactive approach using a source repository and a simple shell script.
+One option would be using a [template repository][github-template repository],
+except it relies upon people to use it and only supports static content.  This
+is where `gh-publicize` can offer a reactive approach using a source repository
+and a simple shell script.
 
 - **Source Repository**
 
@@ -92,7 +97,9 @@ One option would be using a [template repository](https://docs.github.com/en/rep
   updateLabels
   ```
 
-In the example above, the source repository contains the base files and it may be a template repository in fact while the shell script leverages [helper functions](lib/helpers.sh) to copy missing files only and update labels.
+In the example above, the source repository contains the base files and it may
+be a template repository in fact while the shell script leverages 
+[helper functions](lib/helpers.sh) to copy missing files only and update labels.
 
 <details><summary><b>Example of <code>gh publicize</code> output</b></summary>
 <p>
@@ -288,3 +295,12 @@ Like any other `gh` CLI extension, `gh-publicize` is trivial to install or upgra
   ```
 
   _For more information: [`gh extension upgrade`](https://cli.github.com/manual/gh_extension_upgrade)_
+
+[github-codeowners]: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+[github-code of conduct]: https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project
+[github-gitignore]: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+[gitignore.io]: https://gitignore.io
+[github-license]: https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-license-to-a-repository
+[github-template repository]: https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository
+[contributor covenant]: https://www.contributor-covenant.org/
+[choosealicense]: https://choosealicense.com/
