@@ -1,6 +1,8 @@
 name: Pull request
 on:
-  pull_request_target:
+  pull_request:
+    branches:
+      - main
 jobs:
   extension:
     name: Lint
