@@ -295,6 +295,16 @@ Like any other `gh` CLI extension, `gh-publicize` is trivial to install or upgra
 
   _For more information: [`gh extension upgrade`](https://cli.github.com/manual/gh_extension_upgrade)_
 
+## :sparkles: Thanks
+
+This effort couldn't have happened without the support from many people, so thank you to the following who helped throughout:
+
+[![@karlwithak1](https://avatars.githubusercontent.com/karlwithak1?s=80)](https://github.com/karlwithak1)
+[![@apdarr](https://avatars.githubusercontent.com/apdarr?s=80)](https://github.com/apdarr)
+[![@evgenyrahman](https://avatars.githubusercontent.com/evgenyrahman?s=80)](https://github.com/evgenyrahman)
+[![@katiem0](https://avatars.githubusercontent.com/katiem0?s=80)](https://github.com/katiem0)
+[![@gr2m](https://avatars.githubusercontent.com/gr2m?s=80)](https://github.com/gr2m)
+
 [andyfeller/template]: https://github.com/andyfeller/template
 [choosealicense]: https://choosealicense.com/
 [contributor covenant]: https://www.contributor-covenant.org/
