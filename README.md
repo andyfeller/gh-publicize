@@ -300,6 +300,7 @@ Like any other `gh` CLI extension, `gh-publicize` is trivial to install or upgra
 This effort couldn't have happened without the support from many people, so thank you to the following who helped throughout:
 
 [![@karlwithak1](https://avatars.githubusercontent.com/karlwithak1?s=80)](https://github.com/karlwithak1)
+[![@bval](https://avatars.githubusercontent.com/bval?s=80)](https://github.com/bval)
 [![@apdarr](https://avatars.githubusercontent.com/apdarr?s=80)](https://github.com/apdarr)
 [![@evgenyrahman](https://avatars.githubusercontent.com/evgenyrahman?s=80)](https://github.com/evgenyrahman)
 [![@katiem0](https://avatars.githubusercontent.com/katiem0?s=80)](https://github.com/katiem0)
