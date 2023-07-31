@@ -115,7 +115,7 @@ dryrun mode then run mode, creating pull requests for multiple repositories:
 1. Run `gh-publicize` in dryrun mode:
 
    ```shell
-   $ gh publicize --source-repo=andyfeller/template --repo=andyfeller/test-1 --repo=andyfeller/test-2 00-base.sh
+   $ gh publicize --repo=andyfeller/test-1 --repo=andyfeller/test-2 --source-repo=andyfeller/template 00-base.sh
    ```
 
    <details>
@@ -197,7 +197,7 @@ dryrun mode then run mode, creating pull requests for multiple repositories:
 1. Run `gh-publicize` in run mode:
 
    ```shell
-   $ gh publicize --run --source-repo=andyfeller/template --repo=andyfeller/test-1 --repo=andyfeller/test-2 00-base.sh
+   $ gh publicize --run --repo=andyfeller/test-1 --repo=andyfeller/test-2 --source-repo=andyfeller/template 00-base.sh
    ```
 
    <details>
