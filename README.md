@@ -37,6 +37,7 @@ USAGE
 FLAGS
   -a, --include-archived-repos         Whether to include archived repositories
   -c, --cache-dir=<cache-dir>          Name of directory containing preserved data to reuse
+  -C, --commit-message=<msg>           Commit message to use when pushing changes  
   -d, --debug                          Enable debug logging
   -h, --help                           Displays help usage
   -m, --repo=<owner>/<repo>            Target a specific repo, can be passed multiple times to target several repos

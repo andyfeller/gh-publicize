@@ -25,6 +25,7 @@ USAGE
 FLAGS
   -a, --include-archived-repos         Whether to include archived repositories
   -c, --cache-dir=<cache-dir>          Name of directory containing preserved data to reuse
+  -C, --commit-message=<msg>           Commit message to use when pushing changes
   -d, --debug                          Enable debug logging
   -h, --help                           Displays help usage
   -m, --repo=<owner>/<repo>            Target a specific repo, can be passed multiple times to target several repos
@@ -68,6 +69,10 @@ while getopts "ac:dhm:n:o:P:pR:rs:t:-:" OPT; do
 
 		cache-dir | c)
 			CACHE_DIR="${OPTARG}"
+			;;
+
+		commit-message | C)
+			COMMIT_MESSAGE="${OPTARG}"
 			;;
 
 		debug | d)
@@ -205,8 +210,12 @@ if [ -n "$REVIEWERS" ]; then
 	GIT_XARGS_ARGS+=(--reviewers "$REVIEWERS")
 fi
 
+COMMIT_MESSAGE=${COMMIT_MESSAGE:-"Publishing changes based on ${SOURCE_REPO}@${SOURCE_REPO_SHA}"}
+
+echo "DBG USING COMMIT MESSAGE:  $COMMIT_MESSAGE"
+
 GIT_XARGS_ARGS+=(--branch-name "publish-$SOURCE_REPO-$SOURCE_REPO_SHA")
-GIT_XARGS_ARGS+=(--commit-message "Publishing changes based on ${SOURCE_REPO}@${SOURCE_REPO_SHA}")
+GIT_XARGS_ARGS+=(--commit-message "$COMMIT_MESSAGE")
 GIT_XARGS_ARGS+=("$@")
 
 echo "Executing git-xargs command"
